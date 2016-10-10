@@ -1,7 +1,6 @@
 package com.langstok.nlp.ixatokprocessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
@@ -12,7 +11,7 @@ import ixa.kaflib.KAFDocument;
 
 
 @EnableBinding(Sink.class)
-public class LoggingSink {
+public class IxaTokProcessor {
 	
 	@Autowired
 	IxaTokService ixaTokService;

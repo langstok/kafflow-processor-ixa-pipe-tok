@@ -56,80 +56,25 @@ public class IxaTokService {
 		return document;
 	}
 
-	public final KAFDocument annotate(KAFDocument kaf)
-			throws IOException, JDOMException
-	{
-		final String outputFormat = tokProperties.getOutputFormat();
+	public final KAFDocument annotate(KAFDocument kaf) throws IOException, JDOMException	{
+		
 		final String normalize = tokProperties.getNormalize();
 		final String lang = tokProperties.getLanguage();
 		final String untokenizable = tokProperties.getUntokenizable();
-		final String kafVersion = tokProperties.getKafversion();
-		final Boolean inputKafRaw = tokProperties.getInputkaf();
-		final Boolean noTok = tokProperties.getNotok();
 		final String hardParagraph = tokProperties.getHardParagraph();
 		final Properties properties = setAnnotateProperties(lang, normalize, untokenizable, hardParagraph);
-
-		BufferedReader breader = null;
-		final BufferedWriter bwriter = new BufferedWriter(new OutputStreamWriter(
-				System.out, "UTF-8"));
-		/**
-		KAFDocument kaf;
-
-		if (noTok) {
-			final BufferedReader noTokReader = new BufferedReader(
-					new InputStreamReader(System.in, "UTF-8"));
-			kaf = new KAFDocument(lang, kafVersion);
-			final KAFDocument.LinguisticProcessor newLp = kaf.addLinguisticProcessor(
-					"text", "ixa-pipe-tok-notok-" + lang, version + "-" + commit);
-			newLp.setBeginTimestamp();
-			Annotate.tokensToKAF(noTokReader, kaf);
-			newLp.setEndTimestamp();
-			bwriter.write(kaf.toString());
-			noTokReader.close();
-		} 
-
-		else {
-
-			if (inputKafRaw) {
-				final BufferedReader kafReader = new BufferedReader(
-						new InputStreamReader(System.in, "UTF-8"));
-				// read KAF from standard input
-				kaf = KAFDocument.createFromStream(kafReader);*/
-				final String text = kaf.getRawText();
-				final StringReader stringReader = new StringReader(text);
-				breader = new BufferedReader(stringReader);
-			/*} 
-			else {
-				kaf = new KAFDocument(lang, kafVersion);
-				breader = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
-			}*/
-
-
-			final Annotate annotator = new Annotate(breader, properties);
-			/*if (outputFormat.equalsIgnoreCase("conll")) {
-				if (tokProperties.getOffsets()) {
-					bwriter.write(annotator.tokenizeToCoNLL());
-					annotator.tokenizeToCoNLL();
-				} else {
-					bwriter.write(annotator.tokenizeToCoNLLOffsets());
-				}
-			} 
-			else if (outputFormat.equalsIgnoreCase("oneline")) {
-				bwriter.write(annotator.tokenizeToText());
-			} 
-			else {*/
-				final KAFDocument.LinguisticProcessor newLp = kaf
-						.addLinguisticProcessor("text", "ixa-pipe-tok-" + lang, version
-								+ "-" + commit);
-				newLp.setBeginTimestamp();
-				annotator.tokenizeToKAF(kaf);
-				newLp.setEndTimestamp();
-				/*bwriter.write(kaf.toString());*/
-			/*}*/
-			
-			breader.close();
-		/*}
-		bwriter.close();*/
+		final String text = kaf.getRawText();
+		final StringReader stringReader = new StringReader(text);
+		BufferedReader breader = new BufferedReader(stringReader);
+		
+		final Annotate annotator = new Annotate(breader, properties);
+		final KAFDocument.LinguisticProcessor newLp = kaf
+				.addLinguisticProcessor("text", "ixa-pipe-tok-" + lang, version
+						+ "-" + commit);
+		newLp.setBeginTimestamp();
+		annotator.tokenizeToKAF(kaf);
+		newLp.setEndTimestamp();
+		breader.close();
 		return kaf;
 	}
 
