@@ -1,4 +1,4 @@
-package com.langstok.nlp.ixatokprocessor;
+package com.langstok.nlp.ixatok;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,8 +24,8 @@ public class IxaTokService {
 	private final static Logger LOGGER = Logger.getLogger(IxaTokService.class);
 
 	@Autowired
-	TokProperties tokProperties;
-
+	TokProperties properties;
+	
 	private final String version = CLI.class.getPackage()
 			.getImplementationVersion();
 	/**
@@ -36,8 +36,8 @@ public class IxaTokService {
 
 
 	public KAFDocument transform(KAFDocument document){
-		LOGGER.info("KAF TOK processing start (publicId / uri): " 
-				+ document.getPublic().publicId + " / " + document.getPublic().uri);
+		LOGGER.info("IXATOK started for publicId: " 
+				+ document.getPublic().publicId + " and uri: " + document.getPublic().uri);
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		try {
@@ -49,33 +49,33 @@ public class IxaTokService {
 			LOGGER.error("JDOMException", e);
 		}
 		stopWatch.stop();
-		LOGGER.info("KAF TOK processing finished (time ms / publicId / uri): " 
-				+ stopWatch.getTotalTimeMillis() + " / " + document.getPublic().publicId + " / " + document.getPublic().uri);
+		LOGGER.info("IXATOK finished in time: " 
+				+ stopWatch.getTotalTimeMillis() + " for publicId: " + document.getPublic().publicId);
 		return document;
 	}
 
 	public final KAFDocument annotate(KAFDocument kaf) throws IOException, JDOMException	{
 		
-		final String normalize = tokProperties.getNormalize();
-		final String lang = tokProperties.getLanguage();
-		final String untokenizable = tokProperties.getUntokenizable();
-		final String hardParagraph = tokProperties.getHardParagraph();
-		final Properties properties = setAnnotateProperties(lang, normalize, untokenizable, hardParagraph);
+		final String normalize = properties.getNormalize();
+		final String lang = properties.getLanguage();
+		final String untokenizable = properties.getUntokenizable();
+		final String hardParagraph = properties.getHardParagraph();
+		final String language = properties.getLanguage();
+		
+		final Properties properties = setAnnotateProperties(lang, normalize, untokenizable, hardParagraph);	
 		final String text = kaf.getRawText();
 		final StringReader stringReader = new StringReader(text);
 		BufferedReader breader = new BufferedReader(stringReader);
-		
-		final Annotate annotator = new Annotate(breader, properties);
 		final KAFDocument.LinguisticProcessor newLp = kaf
-				.addLinguisticProcessor("text", "ixa-pipe-tok-" + lang, version
+				.addLinguisticProcessor("text", "ixa-pipe-tok-" + language, version
 						+ "-" + commit);
 		newLp.setBeginTimestamp();
+		Annotate annotator = new Annotate(breader, properties);
 		annotator.tokenizeToKAF(kaf);
 		newLp.setEndTimestamp();
 		breader.close();
 		return kaf;
 	}
-
 
 
 	private Properties setAnnotateProperties(final String lang, final String normalize, final String untokenizable, final String hardParagraph) {

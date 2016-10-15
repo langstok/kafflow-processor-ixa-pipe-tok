@@ -1,4 +1,4 @@
-package com.langstok.nlp.ixatokprocessor;
+package com.langstok.nlp.ixatok;
 
 import javax.validation.constraints.Pattern;
 
@@ -6,14 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties
 public class TokProperties {
-	
-	/**
-	 * It is REQUIRED to choose a language to perform annotation with ixa-pipe-tok
-	 * 	"de", "en", "es", "eu", "fr", "gl", "it", "nl"
-	 */
-	private String language = "en";
-		
-	
+			
 	/**
 	 * Set normalization method according to corpus; the default option does not escape brackets or forward slashes. See README for more details.
 	 * "alpino", "ancora", "ctag", "default", "ptb", "tiger", "tutpenn"
@@ -57,18 +50,12 @@ public class TokProperties {
 	 */
 	private String hardParagraph = "no";
 
-	public String getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
 	@Pattern(regexp = "(?i)(alpino|ancora|ctag|default|ptb|tiger|tutpenn)")
 	public String getNormalize() {
 		return normalize;
 	}
+	
+	private String language = "en";
 
 	public void setNormalize(String normalize) {
 		this.normalize = normalize;
@@ -130,7 +117,12 @@ public class TokProperties {
 		this.hardParagraph = hardParagraph;
 	}
 
-	
-	
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
 
 }

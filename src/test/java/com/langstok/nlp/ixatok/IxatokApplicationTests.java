@@ -1,4 +1,4 @@
-package news.colourful.nlp.ixatok;
+package com.langstok.nlp.ixatok;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

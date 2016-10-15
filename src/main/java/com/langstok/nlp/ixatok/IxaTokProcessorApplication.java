@@ -1,4 +1,4 @@
-package com.langstok.nlp.ixatokprocessor;
+package com.langstok.nlp.ixatok;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

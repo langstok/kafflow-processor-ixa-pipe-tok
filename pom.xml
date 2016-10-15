@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.langstok.nlp</groupId>
-	<artifactId>ixatokprocessor</artifactId>
+	<artifactId>processor-ixa-pipe-tok</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>ixatokprocessor</name>
+	<name>processor-ixa-pipe-tok</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -35,17 +35,15 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>com.github.ixa-ehu</groupId>
-			<artifactId>kaflib-naf</artifactId>
-			<version>1.1.15</version>
-		</dependency>
-
 		<dependency>
 			<groupId>eus.ixa</groupId>
 			<artifactId>ixa-pipe-tok</artifactId>
 			<version>1.8.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 

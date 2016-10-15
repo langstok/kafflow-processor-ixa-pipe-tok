@@ -1,0 +1,7 @@
+server:
+  port: ${vcap.application.sinknafhttp.port:0}
+
+logging:
+  file: processor-ixa-pipe-tok.log
+  level: 
+    com.langstok: debug
