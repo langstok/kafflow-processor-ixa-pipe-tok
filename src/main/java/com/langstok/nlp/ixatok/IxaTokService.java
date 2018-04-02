@@ -1,31 +1,35 @@
 package com.langstok.nlp.ixatok;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Properties;
-
-import org.apache.log4j.Logger;
+import eus.ixa.ixa.pipe.tok.Annotate;
+import eus.ixa.ixa.pipe.tok.CLI;
+import ixa.kaflib.KAFDocument;
 import org.jdom2.JDOMException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
-import eus.ixa.ixa.pipe.tok.Annotate;
-import eus.ixa.ixa.pipe.tok.CLI;
-import ixa.kaflib.KAFDocument;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Properties;
 
 
 @Service
 @EnableConfigurationProperties(TokProperties.class)
 public class IxaTokService {
 
-	private final static Logger LOGGER = Logger.getLogger(IxaTokService.class);
+	final static Logger logger = LoggerFactory.getLogger(IxaTokService.class);
 
-	@Autowired
-	TokProperties properties;
-	
+	private TokProperties properties;
+
+
+	public IxaTokService(TokProperties properties) {
+		this.properties = properties;
+	}
+
+
 	private final String version = CLI.class.getPackage()
 			.getImplementationVersion();
 	/**
@@ -36,20 +40,20 @@ public class IxaTokService {
 
 
 	public KAFDocument transform(KAFDocument document){
-		LOGGER.info("IXATOK started for publicId: " 
+		logger.info("IXATOK started for publicId: "
 				+ document.getPublic().publicId + " and uri: " + document.getPublic().uri);
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		try {
-			LOGGER.info("Tokenize: " + document.getFileDesc().title);
+			logger.info("Tokenize: " + document.getFileDesc().title);
 			document = annotate(document);
 		} catch (IOException e) {
-			LOGGER.error("IOException", e);
+			logger.error("IOException", e);
 		} catch (JDOMException e) {
-			LOGGER.error("JDOMException", e);
+			logger.error("JDOMException", e);
 		}
 		stopWatch.stop();
-		LOGGER.info("IXATOK finished in time: " 
+		logger.info("IXATOK finished in time: "
 				+ stopWatch.getTotalTimeMillis() + " for publicId: " + document.getPublic().publicId);
 		return document;
 	}

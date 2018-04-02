@@ -1,20 +1,21 @@
 package com.langstok.nlp.ixatok;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import ixa.kaflib.KAFDocument;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.messaging.Processor;
-import org.springframework.integration.annotation.Transformer;
-
-import ixa.kaflib.KAFDocument;
+import org.springframework.integration.annotation.ServiceActivator;
 
 
 @EnableBinding(Processor.class)
 public class IxaTokProcessor {
 
-	@Autowired
-	IxaTokService ixaTokService;
+	private IxaTokService ixaTokService;
 
-	@Transformer(inputChannel = Processor.INPUT, outputChannel = Processor.OUTPUT)
+	public IxaTokProcessor(IxaTokService ixaTokService) {
+		this.ixaTokService = ixaTokService;
+	}
+
+	@ServiceActivator(inputChannel = Processor.INPUT, outputChannel = Processor.OUTPUT)
 	public KAFDocument handle(KAFDocument kaf) {
 		return ixaTokService.transform(kaf);
 	}
